@@ -1,0 +1,59 @@
+1. Run Containers as a Non-Root User:-
+First set up a dedicated user or group identifier with only the access permissions your application needs.
+Then add the USER Dockerfile directive to specify this user or group for running commands in the image build and container runtime processes.
+The following is a very basic Dockerfile example. However, you can repeat the USER statement as many times as necessary, as you may sometimes need to run different processes that require different permission levels.
+
+FROM centos:7
+     RUN groupadd -g 1000 devuser &&
+     useradd -r -u 1000 -g devuser devuser
+     USER devuser
+
+➜ Including the –user option in your Docker run command.
+The –user option in the Docker run command overrides any user specified in your Dockerfile. Therefore, in the following example, your container will always run with the least privilege—provided user identifier 1009 also has the lowest permission level.
+ $ docker run --user 1009 centos:7
+
+However, this method doesn't address the underlying security flaw of the image itself. Therefore it's better to specify a non-root user in your Dockerfile so your containers always run securely.
+
+Please note: The Linux kernel doesn't recognize usernames. So you must specify a user or group identifier instead.
+
+2. Use Your Own Private Registry:-
+A private registry is a fully independent catalog of container images set up by the organization that uses it. You can host it on your own on-premises infrastructure or on a third-party registry service such as Amazon ECR , Azure Container Registry , Google Container Registry , Red Hat Quay and JFrog’s own container registry service .
+
+Private registries give you complete control over how you manage your images and generally offer more advanced features, which can help keep your inventory secure.
+
+They typically include functionality, such as:
+Sophisticated image scanning tools for identifying compromises and unpatched vulnerabilities.
+Strict governance, such as role-based access control (RBAC) and compliance monitoring.
+Digital signing, image authentication and other tamper-protection capabilities.
+Segregated registries for use in development, test and production.
+By contrast, public registries, such as Docker Hub , by and large provide only a basic service—where you have to put your trust in an image publisher, who may not adhere to the same high standards of security.
+
+As a result, you could end up with images that contain malicious or outdated code and ultimately live container environments that are wide open to a data breach.
+
+3. Keep Your Images Lean and Clean:-
+
+The larger the image, the larger the attack surface of your Docker containers.
+In the case of a fully fledged VM, you have no choice but to use an entire operating system. But with Docker workloads, your containers only have to provide the resources your application needs.
+
+Choose Minimized Parent Images:-
+
+First, you should be aware that some images on Docker Hub are more streamlined than others. For example, in the ubuntu repository, some images are more than twice the size of others.
+Therefore you shouldn't just automatically pull the latest image. Ideally, you should look for one that has the lowest footprint and then add any packages and dependencies required to support your application.
+
+$ docker images  --> we can check the actual size of docker images using this command.
+
+Example for the nonroot dockerfile
+[ec2-user@ip-172-31-5-79 testing-doc]$ cat Dockerfile
+##########################################
+# Dockerfile to change from root to
+# non-root privilege
+###########################################
+# Base image is Ubuntu 18.04
+FROM ubuntu:18.04
+# Add a new user "john" with user id 8877
+RUN useradd -u 8877 john
+# Change to non-root privilege
+USER john
+[ec2-user@ip-172-31-5-79 testing-doc]$
+
+Note: This user 'john'id "8877" doesn't have more privilges.
