@@ -3,11 +3,6 @@ First set up a dedicated user or group identifier with only the access permissio
 Then add the USER Dockerfile directive to specify this user or group for running commands in the image build and container runtime processes.
 The following is a very basic Dockerfile example. However, you can repeat the USER statement as many times as necessary, as you may sometimes need to run different processes that require different permission levels.
 
-FROM centos:7
-     RUN groupadd -g 1000 devuser &&
-     useradd -r -u 1000 -g devuser devuser
-     USER devuser
-
 ➜ Including the –user option in your Docker run command.
 The –user option in the Docker run command overrides any user specified in your Dockerfile. Therefore, in the following example, your container will always run with the least privilege—provided user identifier 1009 also has the lowest permission level.
  $ docker run --user 1009 centos:7
