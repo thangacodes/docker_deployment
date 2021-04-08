@@ -64,7 +64,7 @@ wordpress:
 wordpress_db:
   image: mariadb
   environment:
-    MYSQL_ROOT_PASSWORD: login1-2
+    MYSQL_ROOT_PASSWORD: passwd
 phpmyadmin:
   image: corbinu/docker-phpmyadmin
   links:
@@ -73,13 +73,15 @@ phpmyadmin:
     - 8181:80
   environment:
     MYSQL_USERNAME: root
-    MYSQL_ROOT_PASSWORD: login1-2
+    MYSQL_ROOT_PASSWORD: passwd
 
 =================================================================================================================================
 How to check over the browser?
 
 http://PUBLIC-IP:8080/
 http://PUBLIC-IP:8181/
+
+Note: docker-compose down --> to scale in the containers
 
 #################################################################################################################################
 
