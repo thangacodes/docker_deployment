@@ -1,0 +1,126 @@
+### This page shows you, how to install Docker engine on EC2 instance in Amazon Web Services.
+
+1) What is Docker?
+
+Docker is a set of platform as a service products that use OS-level virtualization to deliver software in packages called containers.
+
+2) What is Docker container?
+
+Containers are isolated from one another and bundle their own software, libraries and configuration files;
+they can communicate with each other through well-defined channels. In addition to that,
+
+a) Docker Containers are lightweight alternatives to virtual machines and it uses the host OS.
+b) You don't have to Pre-allocated any RAM in containers.
+
+3) What is Docker Images?
+Read only template used to create containers.
+Built by docker users
+stored in docker hub or your local registry.
+
+Docker containers are nothing but, runtime instances of docker images.
+Contains everything needed to run the application.
+Built from one or more images.
+
+How to install docker engine on CentOS 7?
+$ sudo yum install epel-release -y
+$ sudo yum install docker -y
+$ sudo systemctl enable docker
+$ sudo systemctl start docker
+
+To verify the docker engine version after installed,
+
+[root@ip-172-31-10-21 /]# docker --version
+Docker version 1.13.1, build 0be3e21/1.13.1
+
+How to install docker-compose on CentOS 7?
+$ sudo yum install python-pip -y
+$ sudo yum install docker-compose -y
+
+To verify the docker-compose after installed,
+
+[root@ip-172-31-10-21 /]# docker-compose --version
+docker-compose version 1.18.0, build 8dd22a9
+[root@ip-172-31-10-21 /]# 
+
+How to write-up docker-compose file?
+
+First, you need to create a folder, where ever you want to be created. In my case, i created under /opt directory.
+
+[root@ip-172-31-10-21 /]# cd /opt/Docker/wordpress/
+[root@ip-172-31-10-21 wordpress]# pwd
+/opt/Docker/wordpress
+[root@ip-172-31-10-21 wordpress]# ls -ltr
+total 4
+-rw-r--r--. 1 root root 345 Apr  8 07:49 docker-compose.yaml
+[root@ip-172-31-10-21 wordpress]# 
+[root@ip-172-31-10-21 wordpress]# cat docker-compose.yaml 
+
+wordpress:
+  image: wordpress
+  links:
+    - wordpress_db:mysql
+  ports:
+    - 8080:80
+wordpress_db:
+  image: mariadb
+  environment:
+    MYSQL_ROOT_PASSWORD: login1-2
+phpmyadmin:
+  image: corbinu/docker-phpmyadmin
+  links:
+    - wordpress_db:mysql
+  ports:
+    - 8181:80
+  environment:
+    MYSQL_USERNAME: root
+    MYSQL_ROOT_PASSWORD: login1-2
+
+=================================================================================================================================
+How to check over the browser?
+
+http://PUBLIC-IP:8080/
+http://PUBLIC-IP:8181/
+
+#################################################################################################################################
+
+Below is the method to install docker engine and docker-compose on Ubuntu OS,
+
+$ sudo apt-get install linux-image-extra-$(uname -r) linux-image-extra-virtual
+
+To install docker engine on ubunut mahcine,
+
+$ sudo apt-get install docker -engine
+$ sudo service docker start
+$ sudo service docker enable
+$ sudo pip install python
+$ sudo pip install docker-compose
+$ pwd
+/opt/Docker/wordpress
+[root@ip-172-31-10-21 wordpress]# ls -ltr
+total 4
+-rw-r--r--. 1 root root 345 Apr  8 07:49 docker-compose.yaml
+[root@ip-172-31-10-21 wordpress]# 
+
+wordpress:
+  image: wordpress
+  links:
+    - wordpress_db:mysql
+  ports:
+    - 8080:80
+wordpress_db:
+  image: mariadb
+  environment:
+    MYSQL_ROOT_PASSWORD: password
+phpmyadmin:
+  image: corbinu/docker-phpmyadmin
+  links:
+    - wordpress_db:mysql
+  ports:
+    - 8181:80
+  environment:
+    MYSQL_USERNAME: root
+    MYSQL_ROOT_PASSWORD: password
+    
+## Password will be custom one. You need to setup as per your wish!
+
+
