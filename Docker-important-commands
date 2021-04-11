@@ -1,0 +1,85 @@
+This page is show you, what are the important commands being used docker container,
+
+$ docker images  --> list out the images
+$ docker ps -al  --> list out the running/stopped docker containers (a-all)
+$ docker stop $(docker ps -a -q) --> One liner to stop all Docker containers
+$ docker rm $(docker ps -a -q) --> One liner to remove all Docker containers
+$ docker volume ls  --> List out the docker volumes
+$ docker container ls --> list out the active/running containers
+
+## If you want to prepare an image from container, please follow the below steps,
+
+First you need to get the running containter id. Once you get, use below command,
+$ docker commit 9f61a003d0ef
+Then tag the image as below,
+$ docker tag 4a49d21dc7a3 thanga_httpd --> Tagging an image with our custom name
+Note: 4a49d21dc7a3 -this is pointing out the docker image id and thanga_httpd is repository name in docker engine
+$ docker tag thanga_httpd durai5050/custom-repo:httpd-latest
+Note:  thanga_httpd is old name nad durai5050/custom-repo:httpd-latest is the docker hub repo name with custom name
+$ docker push durai5050/custom-repo:httpd-latest  --> Pushing to private dockerhub repository
+
+####################################################################################################################################
+
+How to create a docker image?
+
+Administrator ====>Dockerfile ====> Docker Image ==> Docker Container.
+
+Sample Dockerfile below,
+
+FROM centos:7 
+
+# Install Apache
+RUN yum -y update
+RUN yum -y install httpd httpd-tools
+
+# Install EPEL Repo
+RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+ && rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+
+# Update Apache Configuration
+RUN sed -E -i -e '/<Directory "\/var\/www\/html">/,/<\/Directory>/s/AllowOverride None/AllowOverride All/' /etc/httpd/conf/httpd.conf
+RUN sed -E -i -e 's/DirectoryIndex (.*)$/DirectoryIndex index.php \1/g' /etc/httpd/conf/httpd.conf
+
+EXPOSE 80
+
+# Start Apache
+CMD ["/usr/sbin/httpd","-D","FOREGROUND"]
+
+$ docker build -t my_image . (dot points out current working directory -pwd)
+
+$ docker create --name apache -p 8282:80 httpd_version1.0
+
+[root@ip-172-31-45-44 Docker]# docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+41288c954da7        httpd_version1.0    "/usr/sbin/init"    6 seconds ago       Created                                 apache
+
+Note: We have requested a new container named nginx_base with port 80 exposed to localhost. We are using nginx:alpine as a base image for the container.
+
+$ docker start apache  --> starting apache named container
+$ docker ps -al --> list out, whether the container is started or not.
+$ docker exec -it containerid /bin/bash --> to get into the docker container.
+
+Docker logs:-
+
+$ docker create test image_apache echo hi there
+$ docker start bbd4bd3898f1d66f08ac4ae6a5665e1de986642c86fb87141f437be2eb64a82d
+$ docker logs bbd4bd3898f1d66f08ac4ae6a5665e1de986642c86fb87141f437be2eb64a82d -t ( t--> timestamp)
+
+Reference:-
+
+[root@ip-172-31-45-44 Docker]# docker logs --help
+
+Usage:	docker logs [OPTIONS] CONTAINER
+
+Fetch the logs of a container
+
+Options:
+      --details        Show extra details provided to logs
+  -f, --follow         Follow log output
+      --help           Print usage
+      --since string   Show logs since timestamp
+      --tail string    Number of lines to show from the end of the logs (default "all")
+  -t, --timestamps     Show timestamps
+
+
+
