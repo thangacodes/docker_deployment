@@ -7,6 +7,10 @@ $ docker rm $(docker ps -a -q) --> One liner to remove all Docker containers
 $ docker volume ls  --> List out the docker volumes
 $ docker container ls --> list out the active/running containers
 
+How to come out of a Docker container? without exit?
+
+User Keyboard --> CTRL + P followed by CTRL+Q 
+
 ## If you want to prepare an image from container, please follow the below steps,
 
 First you need to get the running containter id. Once you get, use below command,
