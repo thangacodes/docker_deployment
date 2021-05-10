@@ -1,0 +1,40 @@
+## How to install and run sonarqube using Dokcer contianer?
+
+First login to EC2 instance (t2.micr) type,
+check docker version, whether it got installed or not
+And then, execute below one after another,
+
+# docker pull sonarqube 
+docker run --name sonarqube101 -h sonarqube101 -p 8094:9000 -d sonarqube
+
+-h --> hostname
+-p --> portnumber (expose)
+-d --> detach mode
+-name --> name of the docker container
+8094 is host port and 9000 is container port number
+
+################################################################################################
+
+# docker image nginx history
+
+### Simple Dockerfile below,
+
+FROM ubuntu:bionic (bionic-tag name)
+ENV NGINX_VERSION 1.14.0-0ubuntu1.7
+ENV variablename variablevalue
+RUN apt-get update && apt-get install -y curl
+RUN apt-get update && apt-get install -y nginx=$NGINX_VERSION
+CMD ["nginx", "-g", "daemon off;"]
+
+################################################################################################
+
+FEW important docker containers command
+
+docker run -d --name nginx-tp -p 8080:8080 nginx --> pulling image from docker hub and running it
+docker run -d --name nginx-tp -p 8080:8080 --restart always nginx  --> restarting docker conatiner specifying command called restart
+docker run -d --name nginx-tp -p 8080:8080 --restart unless-stopped nginx --> restart docker container only, when i
+
+docker run -d --name nginx-tp -p 8080:8080 --restart unless-stopped --memory 500M nginx
+
+docker run -d --name nginx-tp -p 8080:8080 --restart unless-stopped --memory-reservation 256M nginx
+
