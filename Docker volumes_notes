@@ -55,3 +55,28 @@ index.html
 
 // Copying index.html file to the container httpd path /var/www/hmtl. To perform this action, we need to get into root admin, then needs to be performed. centos user doesn't have
 privilege to perform this action.
+
+# Additional details. There are '4' app nodes are running. We'd like to see them IP address, how would i get like below
+
+[centos@linux-practice docker]$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                  NAMES
+de38586a9b43        icpage              "/usr/sbin/httpd -..."   32 minutes ago      Up 32 minutes       0.0.0.0:9100->80/tcp   app4
+73fa0ef583c4        icpage              "/usr/sbin/httpd -..."   32 minutes ago      Up 32 minutes       0.0.0.0:9900->80/tcp   app3
+5b6264b404c6        icpage              "/usr/sbin/httpd -..."   32 minutes ago      Up 32 minutes       0.0.0.0:9800->80/tcp   app2
+a7bd47799a5a        icpage              "/usr/sbin/httpd -..."   33 minutes ago      Up 33 minutes       0.0.0.0:9700->80/tcp   app1
+
+[centos@linux-practice docker]$ docker inspect de3 73f 5b6 a7b | grep -i 'IPAddress'
+            "SecondaryIPAddresses": null,
+            "IPAddress": "172.17.0.5",
+                    "IPAddress": "172.17.0.5",
+            "SecondaryIPAddresses": null,
+            "IPAddress": "172.17.0.4",
+                    "IPAddress": "172.17.0.4",
+            "SecondaryIPAddresses": null,
+            "IPAddress": "172.17.0.3",
+                    "IPAddress": "172.17.0.3",
+            "SecondaryIPAddresses": null,
+            "IPAddress": "172.17.0.2",
+                    "IPAddress": "172.17.0.2",
+
+
