@@ -79,4 +79,29 @@ a7bd47799a5a        icpage              "/usr/sbin/httpd -..."   33 minutes ago 
             "IPAddress": "172.17.0.2",
                     "IPAddress": "172.17.0.2",
 
+// To stop the Docker containers in one shot // Just take only first '3' digit from the starting of the docker container id. by default container id comes with 12 digitis,
+
+[centos@linux-practice docker]$ docker stop de3 73f 5b6 a7b
+de3
+73f
+5b6
+a7b
+[centos@linux-practice docker]$ docker system prune   // Removing stopped docker CONTAINERS, VOLUMES, NETWORKS, DANGLING IMAGES
+WARNING! This will remove:
+	- all stopped containers
+	- all volumes not used by at least one container
+	- all networks not used by at least one container
+	- all dangling images
+Are you sure you want to continue? [y/N] y  // iF YOU PRESS 'YES' IT WILL PERFORM ABOVE ACTIONS
+Deleted Containers:
+de38586a9b43bf68c27be4f565abc1026a4da853adf623752d55b2889145de4f
+73fa0ef583c4e52cde084693a1adc350c5dff7cc62615463f64a3fdb2a6c3d5e
+5b6264b404c6ba756b9ef2521c1a532253e93d454af7dd33fcf654ee5e448710
+a7bd47799a5a17734bbb1b1b17cb801b01c24c5fa728dc15d3e105943ff60b1e
+
+Deleted Volumes:
+web-content
+
+Total reclaimed space: 8.435 kB
+
 
