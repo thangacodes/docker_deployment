@@ -1,0 +1,57 @@
+### Docker Volume Notes:
+--------------------------
+
+Pre-requisites:
+=================
+a) Spin up an EC2 instance in AWS Cloud
+b) In my case, I selected OS as CentOS 7
+c) Login to the box using password less authentication
+d) Install docker on it
+
+In /home/centos section, you need to perform below things to keep the data as persistent..
+
+User CentOS section:
+=======================
+
+[centos@linux-practice docker]$ whoami
+centos
+[centos@linux-practice docker]$ pwd
+/home/centos/docker
+[centos@linux-practice docker]$ docker volume create web-content  //web-content --> is a docker volume name
+[centos@linux-practice docker]$ docker volume ls  //list out docker volumes
+DRIVER              VOLUME NAME
+local               web-content
+[centos@linux-practice docker]$ docker images    // list out the docker images
+
+REPOSITORY                          TAG                 IMAGE ID            CREATED             SIZE
+icpage                              latest              3662824de9df        3 hours ago         568 MB
+new                                 latest              be86982f1038        3 hours ago         568 MB
+docker.io/frolvlad/alpine-python3   latest              703243c9152b        5 weeks ago         62.7 MB
+docker.io/centos                    latest              300e315adb2f        8 months ago        209 MB
+
+// Creating FOUR docker containers from the image name called:icpage
+[centos@linux-practice docker]$ docker run -dit -p 9700:80 -v web-content:/var/www/html/ --name=app1 icpage
+[centos@linux-practice docker]$ docker run -dit -p 9800:80 -v web-content:/var/www/html/ --name=app2 icpage
+[centos@linux-practice docker]$ docker run -dit -p 9900:80 -v web-content:/var/www/html/ --name=app3 icpage
+[centos@linux-practice docker]$ docker run -dit -p 9100:80 -v web-content:/var/www/html/ --name=app4 icpage
+
+// Note:dit --> detach, interactive terminal -p--mapping custom port from docker host to the container , web-content - is docker volume mapping to the /var/www/html on container
+// -p 9700:80 , //9700 is mapped to the docker host. //80 is mapped on docker container
+
+[centos@linux-practice docker]$ docker container ls // listing out the containers
+
+// Root user section // swiching as root user 
+
+$ sudo su -
+[root@linux-practice ~]# cd /var/lib/docker/volumes/httpvol/_data/    // default docker volume location in LOCAL is "/var/lib/docker/volumes/httpvol/_data/"
+[root@linux-practice ~]# pwd
+/var/lib/docker/volumes/web-content/_data
+[root@linux-practice _data]# ls
+index.html
+[root@linux-practice _data]# docker cp index.html app1:/var/www/html
+[root@linux-practice _data]# docker cp index.html app2:/var/www/html
+[root@linux-practice _data]# docker cp index.html app3:/var/www/html
+[root@linux-practice _data]# docker cp index.html app4:/var/www/html
+
+// Copying index.html file to the container httpd path /var/www/hmtl. To perform this action, we need to get into root admin, then needs to be performed. centos user doesn't have
+privilege to perform this action.
